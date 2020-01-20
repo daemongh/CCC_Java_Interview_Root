@@ -46,6 +46,11 @@
   </dependencyManagement>
   <dependencies>
     <dependency>
+      <groupId>com.google.code.maven-replacer-plugin</groupId>
+      <artifactId>replacer</artifactId>
+      <version>1.5.3</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
@@ -73,6 +78,31 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <version>1.5.3</version>
+        <executions>
+          <execution>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>replace</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <basedir>${basedir}/src/main/ibdata/</basedir>
+          <includes>
+            <include>**/IB_Test_Tab.txt</include>
+          </includes>
+          <replacements>
+            <replacement>
+              <token>\t</token>
+              <value>|</value>
+            </replacement>
+          </replacements>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.infrastructurebuilder.data</groupId>
         <artifactId>ibdata-maven-plugin</artifactId>
         <executions>
@@ -94,15 +124,9 @@
                   <streams>
                     <stream>
                       <temporaryId>inbound1</temporaryId>
-                      <name>IB_Test_Pipe.txt</name>
+                      <name>IB_Test_Tab.txt</name>
                       <description>Desc for ib_test</description>
-                      <mimeType>text/pipe-separated-values</mimeType>
-                      <!-- Dumb file is currently INSIDE the project like the pioneers did it -->
-                      <url>file:///${basedir}/src/main/ibdata/IB_Test_Pipe.txt</url>
-                      <sha512>625e9e500e8df16601e08d5acf4a98342e0e0e24022573477ac19a898a44cd2a2a146e27446ed4324a5dac982f3edbbcc277588d6810efa03559942f62ca9db7</sha512>
-<!--
-                      <sha512>182527d0a0c984571ddb3a0b73ca3733a29cb55b1e9f41eed140665079aae3f8ed428667a6dede52dad666bf57d4236f415664c9ce2bceda7725c67ab78e76c0</sha512>
--->
+                      <url>file:///${basedir}/src/main/ibdata/IB_Test_Tab.txt</url>
                       <metadata>
                       <!-- Some fake metadata -->
                         <buildDate>${maven.build.timestamp}</buildDate>
